@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - UFH Hub</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Additional dashboard styling */
+        .dashboard-nav {
+            position: sticky;
+            top: 70px;
+            z-index: 100;
+        }
+        
+        .dashboard-nav ul {
+            justify-content: space-between;
+        }
+        
+        .dashboard-nav li {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .dashboard-nav li a {
+            padding: 1rem 0;
+            display: block;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .dashboard-nav li a.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Negotiation styles */
+        .negotiation-tip {
+            background-color: #f8f9fa;
+            padding: 10px 15px;
+            border-left: 4px solid var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .negotiation-status-pending {
+            background-color: #fff8e1;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #ffe082;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">UFH<span>Hub</span></div>
+            <ul class="nav-links">
+                <li><a href="student-dashboard.html" class="active">Dashboard</a></li>
+                <li><a href="#" onclick="logout(); return false;">Logout</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </nav>
+    </header>
+
+    <main class="dashboard">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Student Dashboard</h1>
+        </div>
+
+        <nav class="dashboard-nav">
+            <ul>
+                <li><a href="#available-jobs" class="active" data-tab="available-jobs">Available Jobs</a></li>
+                <li><a href="#accepted-jobs" data-tab="accepted-jobs">Accepted Jobs</a></li>
+                <li><a href="#wallet" data-tab="wallet">Wallet</a></li>
+                <li><a href="#profile" data-tab="profile">Profile</a></li>
+            </ul>
+        </nav>
+
+        <div class="dashboard-container">
+            <div class="main-content">
+                <!-- Available Jobs Tab -->
+                <section id="available-jobs" class="tab-content active">
+                    <h2>Available Jobs</h2>
+                    <div class="job-list" id="available-jobs-list">
+                        <!-- Jobs will be loaded dynamically -->
+                        <div class="job-card">
+                            <div class="job-card-header">
+                                <div>
+                                    <h3 class="job-title">Website Redesign for Student Organization</h3>
+                                    <span class="job-category">Web Development</span>
+                                </div>
+                                <div class="job-budget">₦120,000</div>
+                            </div>
+                            <p class="job-description">We need a talented student to redesign our organization's website. The current site is outdated and needs a fresh, modern look that appeals to students.</p>
+                            <div class="job-meta">
+                                <span><i class="far fa-clock"></i> Posted 2 days ago</span>
+                                <span><i class="far fa-calendar"></i> 2 weeks duration</span>
+                            </div>
+                            <div class="job-actions">
+                                <button class="btn accept-job-btn" data-job-id="1">Accept Offer</button>
+                            </div>
+                        </div>
+
+                        <div class="job-card">
+                            <div class="job-card-header">
+                                <div>
+                                    <h3 class="job-title">Social Media Content Creation</h3>
+                                    <span class="job-category">Digital Marketing</span>
+                                </div>
+                                <div class="job-budget">₦75,000</div>
+                            </div>
+                            <p class="job-description">Looking for a creative student to help create engaging social media content for our startup. Need someone who understands current trends and can create eye-catching visuals.</p>
+                            <div class="job-meta">
+                                <span><i class="far fa-clock"></i> Posted 1 day ago</span>
+                                <span><i class="far fa-calendar"></i> Ongoing (10 hours/week)</span>
+                            </div>
+                            <div class="job-actions">
+                                <button class="btn accept-job-btn" data-job-id="2">Accept Offer</button>
+                            </div>
+                        </div>
+                        
+                        <div class="job-card">
+                            <div class="job-card-header">
+                                <div>
+                                    <h3 class="job-title">Logo Design for Tech Startup</h3>
+                                    <span class="job-category">Graphic Design</span>
+                                </div>
+                                <div class="job-budget">₦90,000</div>
+                            </div>
+                            <p class="job-description">We're looking for a creative student to design a modern, sleek logo for our tech startup. The logo should convey innovation and reliability.</p>
+                            <div class="job-meta">
+                                <span><i class="far fa-clock"></i> Posted 3 days ago</span>
+                                <span><i class="far fa-calendar"></i> 1 week duration</span>
+                            </div>
+                            <div class="job-actions">
+                                <button class="btn accept-job-btn" data-job-id="3">Accept Offer</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Accepted Jobs Tab -->
+                <section id="accepted-jobs" class="tab-content">
+                    <h2>Accepted Jobs</h2>
+                    <div class="job-list" id="accepted-jobs-list">
+                        <!-- Accepted jobs will be loaded dynamically -->
+                        <div class="job-card">
+                            <div class="job-card-header">
+                                <div>
+                                    <h3 class="job-title">Mobile App UI Design</h3>
+                                    <span class="job-category">UI/UX Design</span>
+                                </div>
+                                <div class="job-budget">₦150,000</div>
+                            </div>
+                            <p class="job-description">Design the user interface for a new mobile app focused on student productivity. Need clean, intuitive designs that make task management simple.</p>
+                            <div class="job-meta">
+                                <span><i class="far fa-clock"></i> Accepted 3 days ago</span>
+                                <span><i class="fas fa-circle" style="color: var(--success-color);"></i> Status: In Progress</span>
+                            </div>
+                            <div class="job-actions">
+                                <button class="btn" data-modal-target="chat-modal-1">Chat with Client</button>
+                                <button class="btn" data-modal-target="negotiate-modal-1">Negotiate Price</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Wallet Tab -->
+                <section id="wallet" class="tab-content">
+                    <h2>Wallet</h2>
+                    <div class="wallet-card">
+                        <div class="wallet-label">Current Balance</div>
+                        <div class="wallet-balance">₦0.00</div>
+                        <div class="wallet-actions">
+                            <button class="btn" data-modal-target="deposit-modal">Deposit</button>
+                            <button class="btn" data-modal-target="withdraw-modal">Withdraw</button>
+                        </div>
+                    </div>
+
+                    <h3>Transaction History</h3>
+                    <div class="transaction-list">
+                        <p>No transactions yet.</p>
+                    </div>
+                </section>
+
+                <!-- Profile Tab -->
+                <section id="profile" class="tab-content">
+                    <div class="profile-section">
+                        <div class="profile-header">
+                            <img src="cat.jpeg" alt="Profile Avatar" class="profile-avatar">
+                            <div class="profile-info">
+                                <h2>John Doe</h2>
+                                <p class="profile-role">Student Freelancer</p>
+                            </div>
+                        </div>
+
+                        <div class="profile-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">0</div>
+                                <div class="stat-label">Completed Jobs</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">1</div>
+                                <div class="stat-label">In Progress</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">$0</div>
+                                <div class="stat-label">Total Earned</div>
+                            </div>
+                        </div>
+
+                        <h3 class="profile-section-title">Upload Resume</h3>
+                        <div class="upload-area" onclick="document.getElementById('resume-upload').click()">
+                            <i class="fas fa-file-upload upload-icon"></i>
+                            <p>Click to upload your resume (PDF only)</p>
+                            <input type="file" id="resume-upload" class="file-input" accept=".pdf">
+                        </div>
+                        <div id="resume-file-name"></div>
+
+                        <h3 class="profile-section-title">Work Samples</h3>
+                        <div class="upload-area" onclick="document.getElementById('work-samples-upload').click()">
+                            <i class="fas fa-images upload-icon"></i>
+                            <p>Click to upload work samples (Images only)</p>
+                            <input type="file" id="work-samples-upload" class="file-input" accept="image/*" multiple>
+                        </div>
+                        <div id="uploaded-work-samples" class="uploaded-files"></div>
+                        
+                        <h3 class="profile-section-title">Skills</h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag">JavaScript</span>
+                            <span class="skill-tag">HTML/CSS</span>
+                            <span class="skill-tag">UI Design</span>
+                            <button class="btn btn-sm" data-modal-target="add-skill-modal">+ Add Skill</button>
+                        </div>
+                        
+                        <h3 class="profile-section-title">Education</h3>
+                        <div class="education-item">
+                            <h4>Computer Science</h4>
+                            <p>University of Lagos, 2019 - Present</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="sidebar">
+                <div class="profile-summary">
+                    <h3>Quick Stats</h3>
+                    <ul>
+                        <li>Available Jobs: <span>5</span></li>
+                        <li>Applied Jobs: <span>1</span></li>
+                        <li>Completed Jobs: <span>0</span></li>
+                    </ul>
+                </div>
+                <div class="recent-notifications">
+                    <h3>Recent Notifications</h3>
+                    <ul>
+                        <li>Welcome to FreelanceHub! Complete your profile to get started.</li>
+                        <li>New job posted in Web Development that matches your skills.</li>
+                        <li>Your application for "Mobile App UI Design" was accepted.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Chat Modal -->
+    <div class="modal-overlay" id="chat-modal-1">
+        <div class="modal">
+            <button class="modal-close">&times;</button>
+            <div class="modal-header">
+                <h3>Chat with Client</h3>
+                <p>Project: Mobile App UI Design</p>
+            </div>
+            <div class="chat-container">
+                <div class="chat-header">
+                    <h4>Jane Smith (Client)</h4>
+                </div>
+                <div class="chat-messages">
+                    <div class="message message-received">Hi there! Glad you accepted the project. Do you have any questions?</div>
+                    <div class="message message-sent">Hello! Thanks for approving me. I have a few questions about the design requirements.</div>
+                    <div class="message message-received">Of course! What would you like to know specifically?</div>
+                    <div class="message message-sent">Are there any specific color schemes you prefer for the UI?</div>
+                    <div class="message message-received">We're thinking of a blue and white color scheme to match our brand, but we're open to your professional suggestions!</div>
+                </div>
+                <form id="chat-form" class="chat-input">
+                    <input type="text" id="message-input" placeholder="Type your message...">
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Price Negotiation Modal -->
+    <div class="modal-overlay" id="negotiate-modal-1">
+        <div class="modal">
+            <button class="modal-close">&times;</button>
+            <div class="modal-header">
+                <h3>Negotiate Price</h3>
+                <p>Project: Mobile App UI Design</p>
+            </div>
+            <div class="modal-body">
+                <p>Current Offer: <strong>₦150,000</strong></p>
+                <p class="negotiation-tip"><i class="fas fa-info-circle"></i> Tip: Explain why you're proposing a different price. Clients appreciate clear reasoning.</p>
+                <div id="negotiation-status" class="hidden">
+                    <div class="negotiation-status-pending">
+                        <p><i class="fas fa-clock"></i> Client is reviewing your offer of <strong class="offer-amount">₦0</strong></p>
+                        <p>We'll notify you when they respond.</p>
+                    </div>
+                </div>
+                <form id="price-offer-form">
+                    <div class="form-group">
+                        <label for="offer-price">Your Offer (₦)</label>
+                        <input type="number" id="offer-price" class="form-control" placeholder="Enter your price" min="1" step="any" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="offer-message">Message (Required)</label>
+                        <textarea id="offer-message" class="form-control" placeholder="Explain why you're proposing this price. Be professional and specific about your value." required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn" onclick="closeModal(document.getElementById('negotiate-modal-1'))">Cancel</button>
+                        <button type="submit" class="btn">Submit Offer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deposit Modal -->
+    <div class="modal-overlay" id="deposit-modal">
+        <div class="modal">
+            <button class="modal-close">&times;</button>
+            <div class="modal-header">
+                <h3>Deposit Funds</h3>
+            </div>
+            <div class="modal-body">
+                <form id="deposit-form">
+                    <div class="form-group">
+                        <label for="deposit-amount">Amount (₦)</label>
+                        <input type="number" id="deposit-amount" class="form-control" placeholder="Enter amount" min="1" step="any" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="card-number">Card Number</label>
+                        <input type="text" id="card-number" class="form-control" placeholder="1234 5678 9012 3456" required>
+                    </div>
+                    <div class="form-group form-row">
+                        <div>
+                            <label for="expiry-date">Expiry Date</label>
+                            <input type="text" id="expiry-date" class="form-control" placeholder="MM/YY" required>
+                        </div>
+                        <div>
+                            <label for="cvv">CVV</label>
+                            <input type="text" id="cvv" class="form-control" placeholder="123" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn" onclick="closeModal(document.getElementById('deposit-modal'))">Cancel</button>
+                        <button type="submit" class="btn">Deposit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdraw Modal -->
+    <div class="modal-overlay" id="withdraw-modal">
+        <div class="modal">
+            <button class="modal-close">&times;</button>
+            <div class="modal-header">
+                <h3>Withdraw Funds</h3>
+            </div>
+            <div class="modal-body">
+                <form id="withdraw-form">
+                    <div class="form-group">
+                        <label for="withdraw-amount">Amount (₦)</label>
+                        <input type="number" id="withdraw-amount" class="form-control" placeholder="Enter amount" min="1" step="any" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bank-name">Bank Name</label>
+                        <input type="text" id="bank-name" class="form-control" placeholder="Enter bank name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="account-number">Account Number</label>
+                        <input type="text" id="account-number" class="form-control" placeholder="Enter account number" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn" onclick="closeModal(document.getElementById('withdraw-modal'))">Cancel</button>
+                        <button type="submit" class="btn">Withdraw</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Skill Modal -->
+    <div class="modal-overlay" id="add-skill-modal">
+        <div class="modal">
+            <button class="modal-close">&times;</button>
+            <div class="modal-header">
+                <h3>Add New Skill</h3>
+            </div>
+            <div class="modal-body">
+                <form id="add-skill-form">
+                    <div class="form-group">
+                        <label for="skill-name">Skill Name</label>
+                        <input type="text" id="skill-name" class="form-control" placeholder="Enter skill name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="skill-level">Skill Level</label>
+                        <select id="skill-level" class="form-control" required>
+                            <option value="">Select level</option>
+                            <option value="Beginner">Beginner</option>
+                            <option value="Intermediate">Intermediate</option>
+                            <option value="Advanced">Advanced</option>
+                            <option value="Expert">Expert</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn" onclick="closeModal(document.getElementById('add-skill-modal'))">Cancel</button>
+                        <button type="submit" class="btn">Add Skill</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <div class="logo">Freelance<span>Hub</span></div>
+                <p>The #1 freelance platform for students.</p>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#" onclick="logout(); return false;">Logout</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h3>Contact Us</h3>
+                <p>Email: info@freelancehub.com</p>
+                <p>Phone: +234 123 456 7890</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 FreelanceHub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+        // Tab Switching
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab Navigation
+            document.querySelectorAll('.dashboard-nav a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all tabs and links
+                    document.querySelectorAll('.tab-content').forEach(tab => {
+                        tab.classList.remove('active');
+                    });
+                    document.querySelectorAll('.dashboard-nav a').forEach(navLink => {
+                        navLink.classList.remove('active');
+                    });
+                    
+                    // Add active class to selected tab and link
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                    this.classList.add('active');
+                    
+                    // Save the active tab to localStorage
+                    localStorage.setItem('activeStudentDashboardTab', tabId);
+                });
+            });
+            
+            // Check for saved tab
+            const savedTab = localStorage.getItem('activeStudentDashboardTab');
+            if (savedTab) {
+                // Find the link for this tab
+                const tabLink = document.querySelector(`.dashboard-nav a[data-tab="${savedTab}"]`);
+                if (tabLink) {
+                    // Trigger the click event
+                    tabLink.click();
+                }
+            }
+        
+            // Check authentication
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || !user.isLoggedIn || user.userType !== 'student') {
+                window.location.href = 'login.html';
+            }
+            
+            // Price Negotiation
+            const priceOfferForm = document.getElementById('price-offer-form');
+            if (priceOfferForm) {
+                priceOfferForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const price = document.getElementById('offer-price').value;
+                    const message = document.getElementById('offer-message').value;
+                    
+                    if (!price || isNaN(price) || price <= 0) {
+                        showAlert('Please enter a valid amount', 'error');
+                        return;
+                    }
+                    
+                    if (!message.trim()) {
+                        showAlert('Please explain why you are proposing this price', 'error');
+                        return;
+                    }
+                    
+                    // Show loading state
+                    const submitBtn = this.querySelector('[type="submit"]');
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+                    
+                    // Simulate submission delay
+                    setTimeout(() => {
+                        // Hide the form
+                        priceOfferForm.style.display = 'none';
+                        
+                        // Show the status message
+                        const negotiationStatus = document.getElementById('negotiation-status');
+                        negotiationStatus.classList.remove('hidden');
+                        
+                        // Update the amount in the status message
+                        const offerAmount = negotiationStatus.querySelector('.offer-amount');
+                        offerAmount.textContent = `₦${Number(price).toLocaleString()}`;
+                        
+                        // Save in localStorage
+                        const negotiations = JSON.parse(localStorage.getItem('negotiations')) || [];
+                        negotiations.push({
+                            jobId: '1',
+                            price: price,
+                            message: message,
+                            status: 'pending',
+                            timestamp: Date.now()
+                        });
+                        localStorage.setItem('negotiations', JSON.stringify(negotiations));
+                        
+                        showAlert('Price offer submitted successfully!');
+                    }, 1500);
+                });
+            }
+            
+            // Check for existing negotiations
+            const negotiations = JSON.parse(localStorage.getItem('negotiations')) || [];
+            const existingNegotiation = negotiations.find(n => n.jobId === '1' && n.status === 'pending');
+            
+            if (existingNegotiation && priceOfferForm) {
+                // Hide the form
+                priceOfferForm.style.display = 'none';
+                
+                // Show the status message
+                const negotiationStatus = document.getElementById('negotiation-status');
+                negotiationStatus.classList.remove('hidden');
+                
+                // Update the amount in the status message
+                const offerAmount = negotiationStatus.querySelector('.offer-amount');
+                offerAmount.textContent = `₦${Number(existingNegotiation.price).toLocaleString()}`;
+            }
+            
+            // Chat system
+            const chatForm = document.getElementById('chat-form');
+            if (chatForm) {
+                chatForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const messageInput = document.getElementById('message-input');
+                    const message = messageInput.value;
+                    
+                    if (!message.trim()) return;
+                    
+                    const chatMessages = document.querySelector('.chat-messages');
+                    
+                    // Create message element
+                    const messageElement = document.createElement('div');
+                    messageElement.className = 'message message-sent';
+                    messageElement.textContent = message;
+                    
+                    // Add to chat
+                    chatMessages.appendChild(messageElement);
+                    
+                    // Scroll to bottom
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    
+                    // Clear input
+                    messageInput.value = '';
+                    
+                    // Simulate response after a delay
+                    setTimeout(() => {
+                        // Create response element
+                        const responseElement = document.createElement('div');
+                        responseElement.className = 'message message-received';
+                        
+                        // Some canned responses
+                        const responses = [
+                            "I'll look into that and get back to you soon!",
+                            "That's a good point, let me think about it.",
+                            "Thanks for the update. How's the progress on the other parts?",
+                            "Could you provide more details on that?",
+                            "That sounds good to me!"
+                        ];
+                        
+                        responseElement.textContent = responses[Math.floor(Math.random() * responses.length)];
+                        
+                        // Add to chat
+                        chatMessages.appendChild(responseElement);
+                        
+                        // Scroll to bottom
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }, 1000);
+                });
+            }
+        });
+        
+        // Custom alert function
+        function showAlert(message, type = 'success') {
+            const alertBox = document.createElement('div');
+            alertBox.className = `alert alert-${type}`;
+            alertBox.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`;
+            alertBox.style.position = 'fixed';
+            alertBox.style.top = '20px';
+            alertBox.style.right = '20px';
+            alertBox.style.padding = '10px 20px';
+            alertBox.style.borderRadius = '5px';
+            alertBox.style.backgroundColor = type === 'success' ? '#d4edda' : '#f8d7da';
+            alertBox.style.color = type === 'success' ? '#155724' : '#721c24';
+            alertBox.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
+            alertBox.style.zIndex = '9999';
+            alertBox.style.transform = 'translateY(-20px)';
+            alertBox.style.opacity = '0';
+            alertBox.style.transition = 'all 0.3s ease';
+            
+            document.body.appendChild(alertBox);
+            
+            setTimeout(() => {
+                alertBox.style.transform = 'translateY(0)';
+                alertBox.style.opacity = '1';
+            }, 10);
+            
+            setTimeout(() => {
+                alertBox.style.transform = 'translateY(-20px)';
+                alertBox.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(alertBox);
+                }, 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html> 

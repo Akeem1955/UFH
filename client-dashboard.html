@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Dashboard - Freelance Hub</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Additional dashboard styling */
+        .dashboard-nav {
+            position: sticky;
+            top: 70px;
+            z-index: 100;
+        }
+        
+        .dashboard-nav ul {
+            justify-content: space-between;
+        }
+        
+        .dashboard-nav li {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .dashboard-nav li a {
+            padding: 1rem 0;
+            display: block;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .dashboard-nav li a.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Negotiation styles */
+        .negotiation-tip {
+            background-color: #f8f9fa;
+            padding: 10px 15px;
+            border-left: 4px solid var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .negotiation-status-pending {
+            background-color: #fff8e1;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #ffe082;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">UFH<span>Hub</span></div>
+            <ul class="nav-links">
+                <li><a href="client-dashboard.html" class="active">Dashboard</a></li>
+                <li><a href="#" onclick="logout(); return false;">Logout</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </nav>
+    </header>
+
+    <main class="dashboard">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Client Dashboard</h1>
+            <button class="btn" data-modal-target="post-job-modal">Post a Job</button>
+        </div>
+
+        <nav class="dashboard-nav">
+            <ul>
+                <li><a href="#posted-jobs" class="active" data-tab="posted-jobs">Posted Jobs</a></li>
+                <li><a href="#pending-offers" data-tab="pending-offers">Pending Offers</a></li>
+                <li><a href="#in-progress" data-tab="in-progress">In Progress</a></li>
+                <li><a href="#wallet" data-tab="wallet">Wallet</a></li>
+            </ul>
+        </nav>
+
+        <div class="dashboard-container">
+            <div class="main-content">
+                <!-- Posted Jobs Tab -->
+                <section id="posted-jobs" class="tab-content active">
+                    <h2>Posted Jobs</h2>
+                    <div class="job-list" id="posted-jobs-list">
+                        <!-- Jobs will be loaded dynamically -->
+                        <div class="job-card">
+                            <div class="job-card-header">
+                                <div>
+                                    <h3 class="job-title">Mobile App UI Design</h3>
+                                    <span class="job-category">UI/UX Design</span>
+                                </div>
+                                <div class="job-budget">₦150,000</div>
+                            </div>
+                            <p class="job-description">Design the user interface for a new mobile app focused on student productivity. Need clean, intuitive designs that make task management simple.</p>
+                            <div class="job-meta">
+                                <span><i class="far fa-clock"></i> Posted 3 days ago</span>
+                                <span><i class="fas fa-circle" style="color: var(--success-color);"></i> Status: Open</span>
+                                <span><i class="fas fa-user"></i> Applications: 1</span>
+                            </div>
+                            <div class="job-actions">
+                                <button class="btn" data-modal-target="view-applicants-modal-1">View Applicants</button>
+                                <button class="btn" data-modal-target="edit-job-modal-1">Edit Job</button>
+                            </div>
+                        </div>
+
+                        <div class="job-card">
+                            <div class="job-card-header">
+                                <div>
+                                    <h3 class="job-title">Content Writer for Blog Posts</h3>
+                                    <span class="job-category">Content Writing</span>
+                                </div>
+                                <div class="job-budget">₦60,000</div>
+                            </div>
+                            <p class="job-description">Looking for a talented student to write engaging blog posts about technology and education. Each post should be 1000-1500 words with proper research and SEO optimization.</p>
+                            <div class="job-meta">
+                                <span><i class="far fa-clock"></i> Posted 1 day ago</span>
+                                <span><i class="fas fa-circle" style="color: var(--success-color);"></i> Status: Open</span>
+                                <span><i class="fas fa-user"></i> Applications: 0</span>
+                            </div>
+                            <div class="job-actions">
+                                <button class="btn" data-modal-target="view-applicants-modal-2">View Applicants</button>
+                                <button class="btn" data-modal-target="edit-job-modal-2">Edit Job</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Pending Offers Tab -->
+                <section id="pending-offers" class="tab-content">
+                    <h2>Pending Offers</h2>
+                    <div class="job-list" id="pending-offers-list">
+                        <div class="job-card">
+                            <div class="job-card-header">
+                                <div>
+                                    <h3 class="job-title">Mobile App UI Design</h3>
+                                    <span class="job-category">UI/UX Design</span>
+                                </div>
+                                <div class="job-budget">₦150,000</div>
+                            </div>
+                            <div class="applicant-card">
+                                <div class="applicant-info">
+                                    <img src="https://via.placeholder.com/50" alt="Applicant" class="applicant-avatar">
+                                    <div>
+                                        <h4>John Doe</h4>
+                                        <p>UI/UX Designer</p>
+                                    </div>
+                                </div>
+                                <div class="applicant-actions">
+                                    <button class="btn approve-candidate-btn" data-job-id="1" data-candidate-id="john@example.com">Approve</button>
+                                    <button class="btn reject-candidate-btn" data-job-id="1" data-candidate-id="john@example.com">Reject</button>
+                                    <button class="btn" data-modal-target="view-profile-modal-1">View Profile</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- In Progress Tab -->
+                <section id="in-progress" class="tab-content">
+                    <h2>Jobs In Progress</h2>
+                    <div class="job-list" id="in-progress-list">
+                        <!-- Sample in-progress job -->
+                        <div class="job-card">
+                            <div class="job-card-header">
+                                <div>
+                                    <h3 class="job-title">Mobile App UI Design</h3>
+                                    <span class="job-category">UI/UX Design</span>
+                                </div>
+                                <div class="job-budget">₦150,000</div>
+                            </div>
+                            <p class="job-description">Design the user interface for a new mobile app focused on student productivity. Need clean, intuitive designs that make task management simple.</p>
+                            <div class="job-meta">
+                                <span><i class="far fa-clock"></i> Started 2 days ago</span>
+                                <span><i class="fas fa-circle" style="color: var(--warning-color);"></i> Status: In Progress</span>
+                                <span><i class="fas fa-user"></i> Freelancer: John Doe</span>
+                            </div>
+                            <div class="job-actions">
+                                <button class="btn" data-modal-target="chat-modal-client">Chat with Freelancer</button>
+                                <button class="btn" data-modal-target="view-progress-modal">View Progress</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Wallet Tab -->
+                <section id="wallet" class="tab-content">
+                    <h2>Wallet</h2>
+                    <div class="wallet-card">
+                        <div class="wallet-label">Current Balance</div>
+                        <div class="wallet-balance">₦0.00</div>
+                        <div class="wallet-actions">
+                            <button class="btn" data-modal-target="deposit-modal">Deposit</button>
+                            <button class="btn" data-modal-target="withdraw-modal">Withdraw</button>
+                        </div>
+                    </div>
+
+                    <h3>Transaction History</h3>
+                    <div class="transaction-list">
+                        <p>No transactions yet.</p>
+                    </div>
+                </section>
+            </div>
+
+            <div class="sidebar">
+                <div class="profile-summary">
+                    <h3>Account Overview</h3>
+                    <ul>
+                        <li>Posted Jobs: <span>2</span></li>
+                        <li>Pending Offers: <span>1</span></li>
+                        <li>Jobs In Progress: <span>1</span></li>
+                    </ul>
+                </div>
+                <div class="recent-notifications">
+                    <h3>Recent Notifications</h3>
+                    <ul>
+                        <li>Welcome to FreelanceHub! Post your first job to get started.</li>
+                        <li>John Doe has applied to your "Mobile App UI Design" job.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Post Job Modal -->
+    <div class="modal-overlay" id="post-job-modal">
+        <div class="modal">
+            <button class="modal-close">&times;</button>
+            <div class="modal-header">
+                <h3>Post a New Job</h3>
+            </div>
+            <div class="modal-body">
+                <form id="job-post-form" class="job-form-grid">
+                    <div class="form-group">
+                        <label for="job-title">Job Title</label>
+                        <input type="text" id="job-title" class="form-control" placeholder="e.g. Web Developer Needed" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="job-category">Category</label>
+                        <select id="job-category" class="form-control" required>
+                            <option value="">Select a category</option>
+                            <option value="Web Development">Web Development</option>
+                            <option value="Mobile Development">Mobile Development</option>
+                            <option value="UI/UX Design">UI/UX Design</option>
+                            <option value="Graphic Design">Graphic Design</option>
+                            <option value="Content Writing">Content Writing</option>
+                            <option value="Digital Marketing">Digital Marketing</option>
+                            <option value="Data Entry">Data Entry</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="job-budget">Budget (₦)</label>
+                        <input type="number" id="job-budget" class="form-control" placeholder="e.g. 50000" min="1" step="any" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="job-duration">Duration</label>
+                        <input type="text" id="job-duration" class="form-control" placeholder="e.g. 2 weeks, 3 months, etc." required>
+                    </div>
+                    <div class="form-group form-group-full">
+                        <label for="job-description">Job Description</label>
+                        <textarea id="job-description" class="form-control" rows="5" placeholder="Describe the job in detail..." required></textarea>
+                    </div>
+                    <div class="form-group form-group-full">
+                        <label for="job-requirements">Requirements (Optional)</label>
+                        <textarea id="job-requirements" class="form-control" rows="3" placeholder="List any specific requirements or skills needed..."></textarea>
+                    </div>
+                    <div class="modal-footer form-group-full">
+                        <button type="button" class="btn" onclick="closeModal(document.getElementById('post-job-modal'))">Cancel</button>
+                        <button type="submit" class="btn">Post Job</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Applicants Modal -->
+    <div class="modal-overlay" id="view-applicants-modal-1">
+        <div class="modal">
+            <button class="modal-close">&times;</button>
+            <div class="modal-header">
+                <h3>Applicants for "Mobile App UI Design"</h3>
+            </div>
+            <div class="modal-body">
+                <div class="applicant-list">
+                    <div class="applicant-card">
+                        <div class="applicant-info">
+                            <img src="https://via.placeholder.com/50" alt="Applicant" class="applicant-avatar">
+                            <div>
+                                <h4>John Doe</h4>
+                                <p>UI/UX Designer</p>
+                            </div>
+                        </div>
+                        <div class="applicant-actions">
+                            <button class="btn approve-candidate-btn" data-job-id="1" data-candidate-id="john@example.com">Approve</button>
+                            <button class="btn reject-candidate-btn" data-job-id="1" data-candidate-id="john@example.com">Reject</button>
+                            <button class="btn" data-modal-target="view-profile-modal-1">View Profile</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Applicant Profile Modal -->
+    <div class="modal-overlay" id="view-profile-modal-1">
+        <div class="modal">
+            <button class="modal-close">&times;</button>
+            <div class="modal-header">
+                <h3>Applicant Profile</h3>
+            </div>
+            <div class="modal-body">
+                <div class="profile-section">
+                    <div class="profile-header">
+                        <img src="https://via.placeholder.com/100" alt="Profile Avatar" class="profile-avatar">
+                        <div class="profile-info">
+                            <h2>John Doe</h2>
+                            <p class="profile-role">UI/UX Designer</p>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">Completed Jobs</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">4.8</div>
+                            <div class="stat-label">Average Rating</div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="profile-section-title">About</h3>
+                    <p>I'm a passionate UI/UX designer specializing in mobile app interfaces. With 2 years of experience creating engaging user experiences, I strive to deliver designs that are both beautiful and functional.</p>
+                    
+                    <h3 class="profile-section-title">Skills</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">UI Design</span>
+                        <span class="skill-tag">UX Design</span>
+                        <span class="skill-tag">Figma</span>
+                        <span class="skill-tag">Adobe XD</span>
+                        <span class="skill-tag">Prototype Testing</span>
+                    </div>
+                    
+                    <h3 class="profile-section-title">Work Samples</h3>
+                    <div class="uploaded-files">
+                        <div class="file-item">
+                            <img src="https://via.placeholder.com/150" alt="Work Sample">
+                        </div>
+                        <div class="file-item">
+                            <img src="https://via.placeholder.com/150" alt="Work Sample">
+                        </div>
+                        <div class="file-item">
+                            <img src="https://via.placeholder.com/150" alt="Work Sample">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal(document.getElementById('view-profile-modal-1'))">Close</button>
+                <button class="btn approve-candidate-btn" data-job-id="1" data-candidate-id="john@example.com">Approve Candidate</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deposit Modal -->
+    <div class="modal-overlay" id="deposit-modal">
+        <div class="modal">
+            <button class="modal-close">&times;</button>
+            <div class="modal-header">
+                <h3>Deposit Funds</h3>
+            </div>
+            <div class="modal-body">
+                <form id="deposit-form">
+                    <div class="form-group">
+                        <label for="deposit-amount">Amount (₦)</label>
+                        <input type="number" id="deposit-amount" class="form-control" placeholder="Enter amount" min="1" step="any" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="card-number">Card Number</label>
+                        <input type="text" id="card-number" class="form-control" placeholder="1234 5678 9012 3456" required>
+                    </div>
+                    <div class="form-group form-row">
+                        <div>
+                            <label for="expiry-date">Expiry Date</label>
+                            <input type="text" id="expiry-date" class="form-control" placeholder="MM/YY" required>
+                        </div>
+                        <div>
+                            <label for="cvv">CVV</label>
+                            <input type="text" id="cvv" class="form-control" placeholder="123" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn" onclick="closeModal(document.getElementById('deposit-modal'))">Cancel</button>
+                        <button type="submit" class="btn">Deposit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdraw Modal -->
+    <div class="modal-overlay" id="withdraw-modal">
+        <div class="modal">
+            <button class="modal-close">&times;</button>
+            <div class="modal-header">
+                <h3>Withdraw Funds</h3>
+            </div>
+            <div class="modal-body">
+                <form id="withdraw-form">
+                    <div class="form-group">
+                        <label for="withdraw-amount">Amount (₦)</label>
+                        <input type="number" id="withdraw-amount" class="form-control" placeholder="Enter amount" min="1" step="any" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bank-name">Bank Name</label>
+                        <input type="text" id="bank-name" class="form-control" placeholder="Enter bank name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="account-number">Account Number</label>
+                        <input type="text" id="account-number" class="form-control" placeholder="Enter account number" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn" onclick="closeModal(document.getElementById('withdraw-modal'))">Cancel</button>
+                        <button type="submit" class="btn">Withdraw</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Modal for Client -->
+    <div class="modal-overlay" id="chat-modal-client">
+        <div class="modal">
+            <button class="modal-close">&times;</button>
+            <div class="modal-header">
+                <h3>Chat with Freelancer</h3>
+                <p>Project: Mobile App UI Design</p>
+            </div>
+            <div class="chat-container">
+                <div class="chat-header">
+                    <h4>John Doe (Freelancer)</h4>
+                </div>
+                <div class="chat-messages">
+                    <div class="message message-sent">Hi there! Thanks for accepting my job offer. When do you think you can start?</div>
+                    <div class="message message-received">Hello! I've already started working on the initial wireframes. I should have something to show you by tomorrow.</div>
+                    <div class="message message-sent">That's great! Looking forward to seeing them.</div>
+                    <div class="message message-received">Are there any specific color schemes you prefer for the UI?</div>
+                    <div class="message message-sent">We're thinking of a blue and white color scheme to match our brand, but we're open to your professional suggestions!</div>
+                </div>
+                <form id="client-chat-form" class="chat-input">
+                    <input type="text" id="client-message-input" placeholder="Type your message...">
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Progress Modal -->
+    <div class="modal-overlay" id="view-progress-modal">
+        <div class="modal">
+            <button class="modal-close">&times;</button>
+            <div class="modal-header">
+                <h3>Project Progress</h3>
+                <p>Mobile App UI Design</p>
+            </div>
+            <div class="modal-body">
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 40%;"></div>
+                    </div>
+                    <div class="progress-status">40% Complete</div>
+                </div>
+                
+                <h4>Latest Updates</h4>
+                <div class="update-item">
+                    <div class="update-header">
+                        <span class="update-date">Yesterday</span>
+                        <span class="update-title">Wireframes Completed</span>
+                    </div>
+                    <p class="update-description">Completed the initial wireframes for all main screens. Ready for your review.</p>
+                    <div class="update-attachments">
+                        <div class="attachment-item">
+                            <i class="fas fa-file-image"></i>
+                            <span>wireframe_homepage.png</span>
+                        </div>
+                        <div class="attachment-item">
+                            <i class="fas fa-file-image"></i>
+                            <span>wireframe_profile.png</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="update-item">
+                    <div class="update-header">
+                        <span class="update-date">2 days ago</span>
+                        <span class="update-title">Project Started</span>
+                    </div>
+                    <p class="update-description">Project requirements reviewed and work has begun on initial concepts.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <div class="logo">Freelance<span>Hub</span></div>
+                <p>The #1 freelance platform for students.</p>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#" onclick="logout(); return false;">Logout</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h3>Contact Us</h3>
+                <p>Email: info@freelancehub.com</p>
+                <p>Phone: +234 123 456 7890</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 FreelanceHub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+        // Tab Switching
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab Navigation
+            document.querySelectorAll('.dashboard-nav a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all tabs and links
+                    document.querySelectorAll('.tab-content').forEach(tab => {
+                        tab.classList.remove('active');
+                    });
+                    document.querySelectorAll('.dashboard-nav a').forEach(navLink => {
+                        navLink.classList.remove('active');
+                    });
+                    
+                    // Add active class to selected tab and link
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                    this.classList.add('active');
+                    
+                    // Save the active tab to localStorage
+                    localStorage.setItem('activeClientDashboardTab', tabId);
+                });
+            });
+            
+            // Check for saved tab
+            const savedTab = localStorage.getItem('activeClientDashboardTab');
+            if (savedTab) {
+                // Find the link for this tab
+                const tabLink = document.querySelector(`.dashboard-nav a[data-tab="${savedTab}"]`);
+                if (tabLink) {
+                    // Trigger the click event
+                    tabLink.click();
+                }
+            }
+
+            // Check authentication
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || !user.isLoggedIn || user.userType !== 'client') {
+                window.location.href = 'login.html';
+            }
+            
+            // Custom alert function
+            window.showAlert = function(message, type = 'success') {
+                const alertBox = document.createElement('div');
+                alertBox.className = `alert alert-${type}`;
+                alertBox.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`;
+                alertBox.style.position = 'fixed';
+                alertBox.style.top = '20px';
+                alertBox.style.right = '20px';
+                alertBox.style.padding = '10px 20px';
+                alertBox.style.borderRadius = '5px';
+                alertBox.style.backgroundColor = type === 'success' ? '#d4edda' : '#f8d7da';
+                alertBox.style.color = type === 'success' ? '#155724' : '#721c24';
+                alertBox.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
+                alertBox.style.zIndex = '9999';
+                alertBox.style.transform = 'translateY(-20px)';
+                alertBox.style.opacity = '0';
+                alertBox.style.transition = 'all 0.3s ease';
+                
+                document.body.appendChild(alertBox);
+                
+                setTimeout(() => {
+                    alertBox.style.transform = 'translateY(0)';
+                    alertBox.style.opacity = '1';
+                }, 10);
+                
+                setTimeout(() => {
+                    alertBox.style.transform = 'translateY(-20px)';
+                    alertBox.style.opacity = '0';
+                    setTimeout(() => {
+                        document.body.removeChild(alertBox);
+                    }, 300);
+                }, 3000);
+            }
+            
+            // Handle job post submission
+            const jobPostForm = document.getElementById('job-post-form');
+            if (jobPostForm) {
+                jobPostForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const title = document.getElementById('job-title').value;
+                    const category = document.getElementById('job-category').value;
+                    const budget = document.getElementById('job-budget').value;
+                    const duration = document.getElementById('job-duration').value;
+                    const description = document.getElementById('job-description').value;
+                    
+                    if (!title || !category || !budget || !duration || !description) {
+                        showAlert('Please fill in all required fields', 'error');
+                        return;
+                    }
+                    
+                    // Show loading state
+                    const submitBtn = this.querySelector('[type="submit"]');
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Posting...';
+                    
+                    // Simulate submission delay
+                    setTimeout(() => {
+                        // Reset form
+                        jobPostForm.reset();
+                        
+                        // Close modal
+                        closeModal(document.getElementById('post-job-modal'));
+                        
+                        // Reset button
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = 'Post Job';
+                        
+                        showAlert('Job posted successfully!');
+                    }, 1500);
+                });
+            }
+            
+            // Handle approve candidate button
+            document.querySelectorAll('.approve-candidate-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const jobId = this.getAttribute('data-job-id');
+                    const candidateId = this.getAttribute('data-candidate-id');
+                    
+                    // Disable button
+                    this.disabled = true;
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                    
+                    // Simulate processing delay
+                    setTimeout(() => {
+                        // Close any open modals
+                        const openModal = document.querySelector('.modal-overlay:not(.hidden)');
+                        if (openModal) {
+                            closeModal(openModal);
+                        }
+                        
+                        showAlert('Candidate approved successfully!');
+                    }, 1500);
+                });
+            });
+            
+            // Chat system
+            const clientChatForm = document.getElementById('client-chat-form');
+            if (clientChatForm) {
+                clientChatForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const messageInput = document.getElementById('client-message-input');
+                    const message = messageInput.value;
+                    
+                    if (!message.trim()) return;
+                    
+                    const chatMessages = document.querySelector('.chat-messages');
+                    
+                    // Create message element
+                    const messageElement = document.createElement('div');
+                    messageElement.className = 'message message-sent';
+                    messageElement.textContent = message;
+                    
+                    // Add to chat
+                    chatMessages.appendChild(messageElement);
+                    
+                    // Scroll to bottom
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    
+                    // Clear input
+                    messageInput.value = '';
+                    
+                    // Simulate response after a delay
+                    setTimeout(() => {
+                        // Create response element
+                        const responseElement = document.createElement('div');
+                        responseElement.className = 'message message-received';
+                        
+                        // Some canned responses
+                        const responses = [
+                            "I'll work on that right away!",
+                            "Thanks for the feedback, I'll make those adjustments.",
+                            "I have a few ideas about that, let me implement them and show you.",
+                            "I'll have that completed by tomorrow morning.",
+                            "Could you provide a bit more detail on what you're looking for?"
+                        ];
+                        
+                        responseElement.textContent = responses[Math.floor(Math.random() * responses.length)];
+                        
+                        // Add to chat
+                        chatMessages.appendChild(responseElement);
+                        
+                        // Scroll to bottom
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }, 1500);
+                });
+            }
+        });
+        
+        // Modal handling
+        document.addEventListener('click', function(e) {
+            // Check if the clicked element has a data-modal-target attribute
+            const modalTarget = e.target.getAttribute('data-modal-target');
+            if (modalTarget) {
+                const modal = document.getElementById(modalTarget);
+                if (modal) {
+                    // Show the modal
+                    modal.style.display = 'flex';
+                    setTimeout(() => {
+                        modal.classList.add('show');
+                    }, 10);
+                }
+            }
+            
+            // Check if the clicked element is a modal close button
+            if (e.target.classList.contains('modal-close')) {
+                const modal = e.target.closest('.modal-overlay');
+                closeModal(modal);
+            }
+        });
+        
+        // Close modal function
+        function closeModal(modal) {
+            if (modal) {
+                modal.classList.remove('show');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 300);
+            }
+        }
+        
+        // Logout function
+        function logout() {
+            // Remove user data from localStorage
+            localStorage.removeItem('user');
+            
+            // Redirect to login page
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html> 
